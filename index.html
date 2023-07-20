@@ -3,9 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>New Interaction Page</title>
 </head>
 <body>
+
+    <script>
+        //    @description : Script ran when submit button is clicked, it will collect the data in the form and make a JSON out of it to send to APEX class that creates an interaction
+        //    @author : Perficient - Drew Grondahl
+        //    @create date : 7/20/2023    
+        function sendJSON(){
+
+            //collect the data from the form
+            var firstName = document.getElementById("fname").value;
+            var lastName = document.getElementById("lname").value;
+            var prod = document.getElementById("poi").value;
+            var email = document.getElementById("email").value;
+            var phoneNumber = document.getElementById("pnumber").value;
+            var street = document.getElementById("street").value;
+            var city = document.getElementById("city").value;
+            var state = document.getElementById("state").value;
+            var zipCode = document.getElementById("zip").value;
+            var source = "Web Page";
+
+            //budle the data into a JSON file and send it using the fetch method
+            fetch('https://mindful-hawk-bb4yei-dev-ed.trailblaze.my.salesforce.com/services/apexrest/Interaction/', {method: 'POST',
+	            body: JSON.stringify({
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "email": email,
+                    "phoneNumber": phoneNumber,
+                    "city": city,
+                    "state": state, 
+                    "street": street,
+                    "postalCode": zipCode,
+                    "productOfInterest": poi,
+                    "source": source
+	            }),
+	            headers: {'Content-type': 'data/json; charset=UTF-8',
+                              'Access-Control-Allow-Origin' : '*'}
+            }).then(function (response) {
+	            if (response.ok) {
+		        return response.json();
+	            }
+	            return Promise.reject(response);
+            }).then(function (data) {
+	            console.log(data);
+            }).catch(function (error) {
+	            console.warn('Something went wrong.', error);
+            });
+
+            console.log("Data collected and JSON attempted to be sent");
+        }
+    </script>
+
+    <h1>New Interaction Form</h1>
+
+    <!--@description : HTML form users can use to create a new interation, data will be collected and sent to apex class via JS script
+    //@author : Perficient - Drew Grondahl
+    //@create date : 7/19/2023-->
+
+    <form action="Create Interaction">
+        <label for="fname">First Name:</label><br>
+        <input type="text" id="fname" name="fname" required><br>
+        
+        <label for="lname">Last name:</label><br>
+        <input type="text" id="lname" name="lname" required><br>
+
+        <label for="poi">Product of interest:</label><br>
+        <input type="text" id="poi" name="poi" required><br>
+
+        <!--input for email of type email so that it will check format of email address automatically-->
+        <label for="email">Email address:</label><br>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="pnumber">Phone number:</label><br>
+        <input type="text" id="pnumber" name="pnumber" required><br>
+
+        <label for="street">Street name:</label><br>
+        <input type="text" id="street" name="street" required><br>
+
+        <label for="city">City:</label><br>
+        <input type="text" id="city" name="city" required><br>
+
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state" required><br>
+
+        <label for="zip">Zip code:</label><br>
+        <input type="text" id="zip" name="zip" required><br>
+
+        <br><br>
+
+        <input type="button" value="Submit" onclick="sendJSON()">
+    </form>
     
 </body>
 </html>
