@@ -39,7 +39,8 @@
                     "productOfInterest": poi,
                     "source": source
 	            }),
-	            headers: {'Access-Control-Allow-Origin' : '*'}
+	            headers: {'Content-type': 'data/json; charset=UTF-8',
+                              'Access-Control-Allow-Origin' : '*'}
             }).then(function (response) {
 	            if (response.ok) {
 		        return response.json();
